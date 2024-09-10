@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubbles Game</title>
+    <link rel="stylesheet" href="bubble.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+        #main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background-color: aqua;
+        }
+        #panel {
+            width: 80%;
+            overflow: hidden;
+            height: 80%;
+            border-radius: 10px;
+            background-color: white;
+        }
+        #ptop {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 30px;
+            align-items: center;
+            width: 100%;
+            height: 100px;
+            background-color: rgb(11, 78, 78);
+        }
+        .elem {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .box {
+            padding: 10px 20px;
+            background-color: yellow;
+            border-radius: 5px;
+            font-weight: 700;
+            color: black;
+            font-size: 30px;
+        }
+        #pbtm {
+            padding: 20px;
+            width: 100%;
+            height: calc(100% - 100px);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .elem h2 {
+            font-weight: 500;
+            font-size: 22px;
+        }
+        .bubble {
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            width: 60px;
+            height: 60px;
+            background-color: purple;
+            color: white;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .bubble:hover {
+            background-color: plum;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="panel">
+            <div id="ptop">
+                <div class="elem">
+                    <h2>Hit</h2>
+                    <div class="box" id="hit">0</div>
+                </div>
+                <div class="elem">
+                    <h2>Timer</h2>
+                    <div class="box" id="time">60</div>
+                </div>
+                <div class="elem">
+                    <h2>Score</h2>
+                    <div class="box" id="score">0</div>
+                </div>
+            </div>
+            <div id="pbtm">
+                <!-- Bubbles will be inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let hitValue = 0;
+        let score = 0;
+        let timer = 60;
+
+        function makeBubble() {
+            let clutter = '';
+            for (let i = 1; i <= 70; i++) {
+                let rn = Math.floor(Math.random() * 10);
+                clutter += `<div class="bubble">${rn}</div>`;
+            }
+            document.querySelector('#pbtm').innerHTML = clutter;
+        }
+
+        function runTimer() {
+            let timing = setInterval(() => {
+                if (timer > 0) {
+                    timer--;
+                    document.querySelector('#time').textContent = timer;
+                } else {
+                    clearInterval(timing);
+                    document.querySelector('#pbtm').innerHTML = '';
+                }
+            }, 1000);
+        }
+
+        function setHitValue() {
+            hitValue = Math.floor(Math.random() * 10);
+            document.querySelector('#hit').textContent = hitValue;
+        }
+
+        function updateScore() {
+            score += 10;
+            document.querySelector('#score').textContent = score;
+        }
+
+        document.querySelector('#pbtm').addEventListener('click', (event) => {
+            if (event.target.classList.contains('bubble')) {
+                let clickedValue = Number(event.target.textContent);
+                if (clickedValue === hitValue) {
+                    updateScore();
+                    makeBubble();
+                    setHitValue();
+                }
+            }
+        });
+
+        makeBubble();
+        runTimer();
+        setHitValue();
+    </script>
+</body>
+</html>
